@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fuel QR Registration System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <i class="fa-solid fa-gas-pump"></i>
+      <span>FuelQR <span class="brand-accent">System</span></span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto gap-1 align-items-lg-center">
+        <li class="nav-item"><a class="nav-link nav-tab-link active" href="#" data-tab="register"><i class="fa-solid fa-car me-1"></i>Register</a></li>
+        <li class="nav-item"><a class="nav-link nav-tab-link" href="#" data-tab="all"><i class="fa-solid fa-list me-1"></i>All Vehicles</a></li>
+        <li class="nav-item"><a class="nav-link nav-tab-link" href="#" data-tab="search"><i class="fa-solid fa-magnifying-glass me-1"></i>Search</a></li>
+        <li class="nav-item"><a class="nav-link nav-tab-link" href="#" data-tab="update"><i class="fa-solid fa-pen-to-square me-1"></i>Update</a></li>
+        <li class="nav-item"><a class="nav-link nav-tab-link" href="#" data-tab="delete"><i class="fa-solid fa-trash me-1"></i>Delete</a></li>
+        <li class="nav-item ms-2"><small id="dbStatus" class="d-none fw-semibold small"></small></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO BANNER -->
+<div class="hero-banner d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-7">
+        <h1 class="hero-title">Fuel QR <span class="text-accent">Registration</span></h1>
+        <p class="hero-sub">Automate vehicle registration and manage fuel quotas for Sri Lanka's fuel distribution network.</p>
+        <div class="d-flex gap-2 flex-wrap mt-3">
+          <span class="badge-stat"><i class="fa-solid fa-gas-pump me-1"></i>Petrol · Diesel · Electric</span>
+          <span class="badge-stat"><i class="fa-solid fa-qrcode me-1"></i>QR Auto-Generated</span>
+          <span class="badge-stat"><i class="fa-solid fa-database me-1"></i>MongoDB Powered</span>
+        </div>
+      </div>
+      <div class="col-md-5 text-center d-none d-md-block">
+        <i class="fa-solid fa-qrcode hero-qr-icon"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container py-4">
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:9999">
+    <div id="toastMsg" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold" id="toastText"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: REGISTER ═══ -->
+  <div id="tab-register" class="tab-section">
+    <div class="section-card">
+      <div class="section-header">
+        <i class="fa-solid fa-car-side"></i>
+        <h4>Register New Vehicle</h4>
+      </div>
+      <form id="registerForm" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Registration Number <span class="text-danger">*</span></label>
+            <input type="text" id="reg-RegNo" class="form-control" placeholder="e.g. ABC-1234" autocomplete="off"/>
+            <div class="invalid-feedback">Registration number is required.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">First Name <span class="text-danger">*</span></label>
+            <input type="text" id="reg-FirstName" class="form-control" placeholder="Kamal"/>
+            <div class="invalid-feedback">First name is required.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Last Name <span class="text-danger">*</span></label>
+            <input type="text" id="reg-LastName" class="form-control" placeholder="Perera"/>
+            <div class="invalid-feedback">Last name is required.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email <span class="text-danger">*</span></label>
+            <input type="email" id="reg-Email" class="form-control" placeholder="kamal@gmail.com"/>
+            <div class="invalid-feedback">Email is required.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Owner NIC <span class="text-danger">*</span></label>
+            <input type="text" id="reg-OwnerNIC" class="form-control" placeholder="123456789V"/>
+            <div class="invalid-feedback">NIC is required.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Fuel Type <span class="text-danger">*</span></label>
+            <select id="reg-FuelType" class="form-select">
+              <option value="">Select...</option>
+              <option value="Petrol">⛽ Petrol</option>
+              <option value="Diesel">🛢️ Diesel</option>
+              <option value="Electric">⚡ Electric</option>
+            </select>
+            <div class="invalid-feedback">Fuel type is required.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Vehicle Model <span class="text-danger">*</span></label>
+            <input type="text" id="reg-VehicleModel" class="form-control" placeholder="Toyota Vitz"/>
+            <div class="invalid-feedback">Vehicle model is required.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Nearest Fuel Station <span class="text-danger">*</span></label>
+            <input type="text" id="reg-NearestStation" class="form-control" placeholder="Colombo City Fuel"/>
+            <div class="invalid-feedback">Station is required.</div>
+          </div>
+          <div class="col-12 d-flex gap-2 flex-wrap">
+            <button type="submit" class="btn btn-primary-custom px-4">
+              <i class="fa-solid fa-plus me-2"></i>Register Vehicle
+            </button>
+            <button type="button" id="btnClearForm" class="btn btn-outline-secondary px-4">
+              <i class="fa-solid fa-rotate-left me-2"></i>Clear
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- QR Result (hidden until registration succeeds) -->
+      <div id="qrResult" class="qr-result-box mt-4 d-none">
+        <div class="row align-items-center g-3">
+          <div class="col-auto text-center">
+            <img id="qrImage" src="" alt="QR Code" class="qr-img"/>
+            <div class="mt-2">
+              <button id="btnDownloadQR" class="btn btn-sm btn-success">
+                <i class="fa-solid fa-download me-1"></i>Download QR
+              </button>
+            </div>
+          </div>
+          <div class="col">
+            <h5 class="text-success mb-1"><i class="fa-solid fa-circle-check me-2"></i>Registration Successful!</h5>
+            <div id="qrDetails" class="qr-details"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: ALL VEHICLES ═══ -->
+  <div id="tab-all" class="tab-section d-none">
+    <div class="section-card">
+      <div class="section-header d-flex justify-content-between flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <i class="fa-solid fa-table-list"></i>
+          <h4 class="mb-0">All Registered Vehicles</h4>
+        </div>
+        <div class="d-flex gap-2">
+          <!-- 4. jQuery table filter -->
+          <input type="text" id="tableFilter" class="form-control form-control-sm" placeholder="Filter table..." style="width:200px"/>
+          <button id="btnRefresh" class="btn btn-sm btn-outline-primary">
+            <i class="fa-solid fa-arrows-rotate me-1"></i>Refresh
+          </button>
+        </div>
+      </div>
+      <div id="loadingSpinner" class="text-center py-4 d-none">
+        <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+        <div class="mt-2 text-muted">Fetching vehicles...</div>
+      </div>
+      <div class="table-responsive mt-3">
+        <table class="table table-hover vehicle-table" id="vehicleTable" style="display:none">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Reg No</th>
+              <th>Owner</th>
+              <th>Email</th>
+              <th>NIC</th>
+              <th>Fuel</th>
+              <th>Model</th>
+              <th>Station</th>
+              <th>QR</th>
+            </tr>
+          </thead>
+          <tbody id="vehicleTableBody"></tbody>
+        </table>
+      </div>
+      <div id="noVehicles" class="text-center py-5 d-none">
+        <i class="fa-solid fa-car-burst fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No vehicles registered yet.</p>
+      </div>
+      <div class="mt-2 text-muted small" id="vehicleCount"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: SEARCH ═══ -->
+  <div id="tab-search" class="tab-section d-none">
+    <div class="section-card">
+      <div class="section-header">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <h4>Search Vehicles</h4>
+      </div>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">Search By</label>
+          <select id="searchType" class="form-select">
+            <option value="regno">Registration Number</option>
+            <option value="firstname">First Name</option>
+            <option value="lastname">Last Name</option>
+            <option value="email">Email</option>
+            <option value="station">Nearest Station</option>
+            <option value="fueltype">Fuel Type</option>
+            <option value="nic">Owner NIC</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Search Value</label>
+          <input type="text" id="searchValue" class="form-control" placeholder="Enter search value..."/>
+        </div>
+        <div class="col-md-3">
+          <button id="btnSearch" class="btn btn-primary-custom w-100">
+            <i class="fa-solid fa-search me-2"></i>Search
+          </button>
+        </div>
+      </div>
+      <div id="searchResults" class="mt-4"></div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: UPDATE ═══ -->
+  <div id="tab-update" class="tab-section d-none">
+    <div class="section-card">
+      <div class="section-header">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <h4>Update Vehicle Record</h4>
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-5">
+          <label class="form-label">Update By</label>
+          <select id="updateType" class="form-select">
+            <option value="regno">Registration Number</option>
+            <option value="firstname">First Name</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <label class="form-label">Identifier Value</label>
+          <input type="text" id="updateIdentifier" class="form-control" placeholder="e.g. ABC-1234"/>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">&nbsp;</label>
+          <button id="btnFetchForUpdate" class="btn btn-outline-primary w-100">
+            <i class="fa-solid fa-arrow-down me-1"></i>Fetch
+          </button>
+        </div>
+      </div>
+
+      <!-- Edit form (hidden until Fetch succeeds) -->
+      <div id="updateForm" class="d-none">
+        <hr/>
+        <h6 class="text-muted mb-3"><i class="fa-solid fa-pen me-2"></i>Edit Fields Below:</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">First Name</label>
+            <input type="text" id="upd-FirstName" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Last Name</label>
+            <input type="text" id="upd-LastName" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" id="upd-Email" class="form-control"/>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Owner NIC</label>
+            <input type="text" id="upd-OwnerNIC" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Fuel Type</label>
+            <select id="upd-FuelType" class="form-select">
+              <option value="Petrol">⛽ Petrol</option>
+              <option value="Diesel">🛢️ Diesel</option>
+              <option value="Electric">⚡ Electric</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Vehicle Model</label>
+            <input type="text" id="upd-VehicleModel" class="form-control"/>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Nearest Station</label>
+            <input type="text" id="upd-NearestStation" class="form-control"/>
+          </div>
+          <div class="col-12">
+            <button id="btnSaveUpdate" class="btn btn-warning px-4">
+              <i class="fa-solid fa-floppy-disk me-2"></i>Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TAB: DELETE ═══ -->
+  <div id="tab-delete" class="tab-section d-none">
+    <div class="section-card">
+      <div class="section-header">
+        <i class="fa-solid fa-trash"></i>
+        <h4>Delete Vehicle</h4>
+      </div>
+      <div class="alert alert-warning d-flex align-items-center mb-4">
+        <i class="fa-solid fa-triangle-exclamation me-2 fs-5"></i>
+        <div>This action is <strong>permanent</strong> and cannot be undone. The vehicle and its QR code will be removed from the system.</div>
+      </div>
+      <div class="row g-3 align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Registration Number</label>
+          <input type="text" id="deleteRegNo" class="form-control" placeholder="e.g. ABC-1234" autocomplete="off"/>
+        </div>
+        <div class="col-md-3">
+          <button id="btnDelete" class="btn btn-danger w-100">
+            <i class="fa-solid fa-trash me-2"></i>Delete Vehicle
+          </button>
+        </div>
+      </div>
+      <div id="deleteResult" class="mt-3"></div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- QR MODAL -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="qrModalLabel"><i class="fa-solid fa-qrcode me-2"></i>Vehicle QR Code</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalQrImage" src="" alt="QR Code" style="max-width:250px;width:100%;border-radius:12px;"/>
+        <div id="modalVehicleInfo" class="mt-3 text-start small"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnModalDownload" class="btn btn-success">
+          <i class="fa-solid fa-download me-1"></i>Download QR
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+  <div class="container text-center">
+    <p class="mb-0"><i class="fa-solid fa-gas-pump me-2"></i><strong>Fuel QR Registration System</strong> &mdash; Full Stack Assignment &copy; 2026</p>
+    <p class="mt-1 text-muted small">Node.js · Express · MongoDB · Bootstrap 5 · jQuery · AJAX</p>
+  </div>
+</footer>
+
+<!-- Scripts — jQuery must come before app.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

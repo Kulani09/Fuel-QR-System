@@ -1,0 +1,199 @@
+/* ── GLOBAL ─────────────────────────────── */
+:root {
+  --primary: #0a3d62;
+  --accent: #e55039;
+  --accent2: #f39c12;
+  --light-bg: #f0f4f8;
+  --card-bg: #ffffff;
+  --text-main: #2c3e50;
+  --text-muted: #7f8c8d;
+  --success: #27ae60;
+  --radius: 12px;
+}
+
+body {
+  background: var(--light-bg);
+  color: var(--text-main);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── NAVBAR ─────────────────────────────── */
+.navbar {
+  background: linear-gradient(135deg, var(--primary) 0%, #1a5276 100%);
+  box-shadow: 0 2px 12px rgba(10,61,98,0.3);
+  padding: 0.6rem 1rem;
+}
+.navbar-brand { font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px; }
+.brand-accent { color: var(--accent2); }
+.nav-link { color: rgba(255,255,255,0.8) !important; border-radius: 8px; padding: 0.4rem 0.9rem !important; font-size: 0.9rem; transition: all 0.2s; }
+.nav-link:hover, .nav-link.active { color: #fff !important; background: rgba(255,255,255,0.15) !important; }
+
+/* ── HERO BANNER ────────────────────────── */
+.hero-banner {
+  background: linear-gradient(135deg, var(--primary) 0%, #154360 60%, #1a5276 100%);
+  color: white;
+  padding: 2.5rem 0 2rem;
+  margin-bottom: 0;
+}
+.hero-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 0.5rem; }
+.text-accent { color: var(--accent2); }
+.hero-sub { color: rgba(255,255,255,0.75); font-size: 1rem; max-width: 520px; }
+.hero-qr-icon { font-size: 8rem; color: rgba(255,255,255,0.12); }
+.badge-stat {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ── SECTION CARD ───────────────────────── */
+.section-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.8rem;
+  box-shadow: 0 2px 16px rgba(10,61,98,0.08);
+  margin-bottom: 1.5rem;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--light-bg);
+}
+.section-header i { font-size: 1.3rem; color: var(--primary); }
+.section-header h4 { margin: 0; font-weight: 700; color: var(--primary); }
+
+/* ── FORM CONTROLS ──────────────────────── */
+.form-control, .form-select {
+  border: 1.5px solid #d5dde5;
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 0.92rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(10,61,98,0.12);
+}
+.form-label { font-weight: 600; font-size: 0.87rem; color: #445; margin-bottom: 0.3rem; }
+
+/* ── BUTTONS ────────────────────────────── */
+.btn-primary-custom {
+  background: linear-gradient(135deg, var(--primary), #1a5276);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.6rem 1.4rem;
+  transition: all 0.2s;
+}
+.btn-primary-custom:hover { opacity: 0.92; transform: translateY(-1px); color: white; }
+.btn { border-radius: 8px; font-weight: 600; }
+
+/* ── TABLE ──────────────────────────────── */
+.vehicle-table { font-size: 0.88rem; }
+.vehicle-table thead th {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.75rem 0.9rem;
+  white-space: nowrap;
+}
+.vehicle-table thead th:first-child { border-radius: 8px 0 0 0; }
+.vehicle-table thead th:last-child  { border-radius: 0 8px 0 0; }
+.vehicle-table tbody tr { transition: background 0.15s; }
+.vehicle-table tbody tr:hover { background: #eef4fb; }
+.vehicle-table td { vertical-align: middle; padding: 0.65rem 0.9rem; }
+.fuel-badge {
+  padding: 0.25rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.fuel-petrol  { background: #fde8e8; color: #c0392b; }
+.fuel-diesel  { background: #e8f4fd; color: #1a5276; }
+.fuel-electric { background: #e8fdf0; color: #1e8449; }
+
+/* ── QR RESULT BOX ──────────────────────── */
+.qr-result-box {
+  background: #f0faf5;
+  border: 2px solid #a9dfbf;
+  border-radius: var(--radius);
+  padding: 1.2rem 1.5rem;
+}
+.qr-img {
+  width: 140px;
+  height: 140px;
+  border: 3px solid #a9dfbf;
+  border-radius: 10px;
+  padding: 4px;
+  background: white;
+}
+.qr-details { font-size: 0.88rem; line-height: 1.7; }
+
+/* ── SEARCH RESULT CARD ─────────────────── */
+.result-vehicle-card {
+  border: 1.5px solid #d5dde5;
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.8rem;
+  background: white;
+  transition: box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.result-vehicle-card:hover { box-shadow: 0 4px 16px rgba(10,61,98,0.1); }
+.result-regno { font-weight: 800; font-size: 1rem; color: var(--primary); }
+.result-owner { font-size: 0.9rem; color: var(--text-muted); }
+.result-qr { width: 60px; height: 60px; border-radius: 8px; cursor: pointer; border: 2px solid #d5dde5; }
+
+/* ── TOAST ──────────────────────────────── */
+.toast { min-width: 260px; border-radius: 10px; }
+.toast.bg-success { background: var(--success) !important; color: white !important; }
+.toast.bg-danger  { background: #c0392b !important; color: white !important; }
+
+/* ── FOOTER ─────────────────────────────── */
+.footer {
+  background: var(--primary);
+  color: rgba(255,255,255,0.7);
+  padding: 1.5rem 0;
+  font-size: 0.88rem;
+}
+
+/* ── ANIMATION ──────────────────────────── */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tab-section:not(.d-none) { animation: fadeSlide 0.35s ease; }
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media (max-width: 576px) {
+  .section-card { padding: 1.2rem; }
+  .hero-banner { padding: 1.5rem 0 1.2rem; }
+}
+
+/* ── QR THUMBNAIL HOVER ─────────────────── */
+.qr-thumb {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.qr-thumb:hover {
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(10,61,98,0.18);
+}
+
+/* ── DB STATUS BADGE ────────────────────── */
+#dbStatus {
+  padding: 0.25rem 0.6rem;
+  border-radius: 50px;
+  background: rgba(255,255,255,0.1);
+}
